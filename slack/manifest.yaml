@@ -1,0 +1,32 @@
+# Slack app manifest for the Project Operations Agent.
+
+# Slack is both surfaces here: questions come in by @-mention in one channel,
+# approval gates go out to another.
+# Create at https://api.slack.com/apps -> Create New App -> From an app manifest.
+display_information:
+  name: ProjectOps Agent
+  description: Approval gate for the Project Operations Agent (webinar demo)
+  background_color: "#1a1d21"
+features:
+  bot_user:
+    display_name: ProjectOps Agent
+    always_online: true
+oauth_config:
+  scopes:
+    bot:
+      - chat:write
+      - chat:write.public
+      - app_mentions:read
+settings_note: |
+  Subscribe to the `app_mention` bot event. Over Socket Mode this needs no
+  request URL — the event arrives on the same outbound WebSocket the approval
+  buttons already use.
+settings:
+  event_subscriptions:
+    bot_events:
+      - app_mention
+  interactivity:
+    is_enabled: true
+  socket_mode_enabled: true
+  org_deploy_enabled: false
+  token_rotation_enabled: false
