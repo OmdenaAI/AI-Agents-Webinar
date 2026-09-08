@@ -1,0 +1,24 @@
+[project]
+name = "ai-agents-webinar"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "dotenv>=0.9.9",
+    "langgraph>=1.2.11",
+    "langgraph-checkpoint-postgres>=3.1.2",
+    "mcp>=2.2.0",
+    "opentelemetry-exporter-otlp-proto-http>=1.44.0",
+    "opentelemetry-sdk>=1.44.0",
+    "psycopg[binary]>=3.3.5",
+    "slack-bolt>=1.30.0",
+    "uvicorn>=0.52.4",
+]
+
+[project.scripts]
+ai-agents-webinar = "ai_agents_webinar:main"
+
+[build-system]
+requires = ["uv_build>=0.12.3,<0.13.0"]
+build-backend = "uv_build"
