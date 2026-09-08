@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1004 480" width="1004" height="480"
+     role="img" aria-label="Project Operations Agent architecture: Slack to orchestrator to policy to five MCP tool servers to the systems behind them, with OpenTelemetry observing every step.">
+  <title>Project Operations Agent — architecture</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#4a5866"/>
+    </marker>
+    <style>
+      .bg    { fill:#0b0d10 }
+      .box   { fill:#11151a; stroke:#2a323d; stroke-width:2; rx:7 }
+      .gate  { stroke:#ffb020 }
+      .third { stroke:#6b7a52 }
+      .lbl   { fill:#e8ecf1; font:600 15px ui-monospace,SFMono-Regular,Menlo,monospace }
+      .sub   { fill:#7b8794; font:400 12px ui-monospace,SFMono-Regular,Menlo,monospace }
+      .zone  { fill:#5d6875; font:600 11px ui-monospace,SFMono-Regular,Menlo,monospace;
+               letter-spacing:.14em }
+      .wire  { stroke:#4a5866; stroke-width:2; fill:none; marker-end:url(#arrow) }
+      .trunk { stroke:#4a5866; stroke-width:2; fill:none }
+      .tap   { stroke:#38505e; stroke-width:2; fill:none; stroke-dasharray:4 5 }
+      .key   { fill:#5d6875; font:400 11px ui-monospace,SFMono-Regular,Menlo,monospace }
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1004" height="480"/>
+
+  <!-- zone headings -->
+  <text class="zone" x="20"  y="30">ASK</text>
+  <text class="zone" x="210" y="30">DECIDE</text>
+  <text class="zone" x="624" y="30">TOOLS · MCP over HTTP</text>
+  <text class="zone" x="826" y="30">SYSTEMS</text>
+
+  <!-- ask -->
+  <g><rect class="box" x="20" y="176" width="150" height="54"/>
+     <text class="lbl" x="34" y="199">Slack</text>
+     <text class="sub" x="34" y="217">#agent-questions</text></g>
+
+  <!-- decide -->
+  <g><rect class="box" x="210" y="56" width="160" height="54"/>
+     <text class="lbl" x="224" y="79">LiteLLM</text>
+     <text class="sub" x="224" y="97">model gateway</text></g>
+
+  <g><rect class="box" x="210" y="176" width="160" height="54"/>
+     <text class="lbl" x="224" y="199">Orchestrator</text>
+     <text class="sub" x="224" y="217">LangGraph</text></g>
+
+  <g><rect class="box" x="410" y="176" width="150" height="54"/>
+     <text class="lbl" x="424" y="199">Policy</text>
+     <text class="sub" x="424" y="217">deterministic</text></g>
+
+  <g><rect class="box gate" x="410" y="296" width="150" height="54"/>
+     <text class="lbl" x="424" y="319">Slack</text>
+     <text class="sub" x="424" y="337">#agent-approvals</text></g>
+
+  <!-- tools -->
+  <g><rect class="box" x="624" y="60"  width="150" height="46"/>
+     <text class="lbl" x="638" y="82">sprint</text>
+     <text class="sub" x="638" y="99">kanban read+write</text></g>
+  <g><rect class="box" x="624" y="120" width="150" height="46"/>
+     <text class="lbl" x="638" y="142">warehouse</text>
+     <text class="sub" x="638" y="159">read replica</text></g>
+  <g><rect class="box" x="624" y="180" width="150" height="46"/>
+     <text class="lbl" x="638" y="202">http</text>
+     <text class="sub" x="638" y="219">egress allowlist</text></g>
+  <g><rect class="box" x="624" y="240" width="150" height="46"/>
+     <text class="lbl" x="638" y="262">fs</text>
+     <text class="sub" x="638" y="279">sandbox</text></g>
+  <g><rect class="box third" x="624" y="300" width="150" height="46"/>
+     <text class="lbl" x="638" y="322">umaku</text>
+     <text class="sub" x="638" y="339">third-party</text></g>
+
+  <!-- systems: Postgres spans the two rows that reach it, so both wires stay straight -->
+  <g><rect class="box" x="826" y="60" width="158" height="106"/>
+     <text class="lbl" x="840" y="97">Postgres</text>
+     <text class="sub" x="840" y="115">seed + audit log</text>
+     <text class="sub" x="840" y="133">two DB roles</text></g>
+  <g><rect class="box" x="826" y="180" width="158" height="46"/>
+     <text class="lbl" x="840" y="202">Internet</text>
+     <text class="sub" x="840" y="219">allowlisted hosts</text></g>
+  <g><rect class="box" x="826" y="240" width="158" height="46"/>
+     <text class="lbl" x="840" y="262">Filesystem</text>
+     <text class="sub" x="840" y="279">path-restricted</text></g>
+  <g><rect class="box third" x="826" y="300" width="158" height="46"/>
+     <text class="lbl" x="840" y="322">Umaku SaaS</text>
+     <text class="sub" x="840" y="339">live board</text></g>
+
+  <!-- wires: one row, one straight line -->
+  <path class="wire" d="M170 203 H206"/>
+  <path class="wire" d="M370 203 H406"/>
+  <path class="wire" d="M290 174 V114"/>
+  <path class="wire" d="M485 232 V292"/>
+
+  <!-- policy to the tool bus. The http row shares policy's centreline, so this
+       single line is both the bus feed and the http connection - no wire ever
+       crosses another. -->
+  <path class="wire" d="M560 203 H620"/>
+  <path class="trunk" d="M592 83 V323"/>
+  <path class="wire" d="M592 83 H620"/>
+  <path class="wire" d="M592 143 H620"/>
+  <path class="wire" d="M592 263 H620"/>
+  <path class="wire" d="M592 323 H620"/>
+  <!-- junction dot: this is a bus tap, not one wire passing over another -->
+  <circle cx="592" cy="203" r="4" fill="#4a5866"/>
+
+  <!-- each tool to the system behind it: all straight, all horizontal -->
+  <path class="wire" d="M774 83 H822"/>
+  <path class="wire" d="M774 143 H822"/>
+  <path class="wire" d="M774 203 H822"/>
+  <path class="wire" d="M774 263 H822"/>
+  <path class="wire" d="M774 323 H822"/>
+
+  <!-- observability: taps drop into clear space, crossing nothing -->
+  <path class="tap" d="M290 230 V392"/>
+  <path class="tap" d="M485 350 V392"/>
+  <path class="tap" d="M592 323 V392"/>
+  <g><rect class="box" x="210" y="392" width="774" height="50"/>
+     <text class="lbl" x="224" y="415">OpenTelemetry → trace store</text>
+     <text class="sub" x="224" y="433">one trace per run · cost from the gateway · joined to the audit log by trace id</text></g>
+
+  <path class="trunk" d="M20 411 H44"/>
+  <text class="key" x="52" y="415">call</text>
+  <path class="tap" d="M20 429 H44"/>
+  <text class="key" x="52" y="433">observation</text>
+</svg>
