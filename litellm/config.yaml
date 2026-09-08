@@ -1,0 +1,39 @@
+# LiteLLM Proxy - the model gateway.
+
+# Two logical models: a large one for reasoning, synthesis and
+# a small one for tool selection and extraction. 
+# The orchestrator names reasoning or routing but never a provider model id.
+
+model_list:
+  # Large: planning, synthesis and reasoning.
+  - model_name: reasoning
+    litellm_params:
+      model: anthropic/claude-opus-5
+      api_key: os.environ/ANTHROPIC_API_KEY
+
+  # Small: tool selection, classification, extraction.
+  - model_name: routing
+    litellm_params:
+      model: anthropic/claude-haiku-4-5
+      api_key: os.environ/ANTHROPIC_API_KEY
+
+  # The local/private path. Same gateway, same budgets, same call shape - the
+  # only thing that changes is where inference happens.
+  - model_name: local
+    litellm_params:
+      model: os.environ/OLLAMA_MODEL
+      api_base: os.environ/OLLAMA_BASE_URL
+
+litellm_settings:
+  drop_params: true
+  max_budget: 10 # USD
+  budget_duration: 1d
+  # No Langfuse callback here, deliberately. Use 
+  # only if something outside the orchestrator starts calling
+  # the proxy - then these traces would be the only record of it.
+  # success_callback: ["langfuse"]
+  # failure_callback: ["langfuse"]
+
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
+  database_url: os.environ/LITELLM_DATABASE_URL
